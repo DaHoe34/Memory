@@ -1548,11 +1548,6 @@
         <item>가족</item>
         <item>친구</item>
         <item>선생님</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
     </string-array><string name="drawer_open">Open navigation drawer</string></file><file path="/Users/appcreator18/AndroidStudioProjects/Memory/Application/src/main/res/values/template-dimens.xml" qualifiers=""><dimen name="margin_small">8dp</dimen><dimen name="vertical_page_margin">@dimen/margin_medium</dimen><dimen name="margin_tiny">4dp</dimen><dimen name="margin_large">32dp</dimen><dimen name="margin_huge">64dp</dimen><dimen name="margin_medium">16dp</dimen><dimen name="horizontal_page_margin">@dimen/margin_medium</dimen></file><file path="/Users/appcreator18/AndroidStudioProjects/Memory/Application/src/main/res/values/template-styles.xml" qualifiers=""><style name="Widget.SampleContentContainer">
         <item name="android:paddingTop">@dimen/vertical_page_margin</item>
         <item name="android:paddingBottom">@dimen/vertical_page_margin</item>
