@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:weightSum="1"
+    android:gravity="center_horizontal">
 
-</LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:id="@+id/imageView"
+        android:background="@drawable/big"
+        android:layout_row="0"
+        android:layout_column="0" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="400dp"
+        android:id="@+id/imageView2"
+        android:background="@drawable/ikon"
+        android:layout_row="7"
+        android:layout_column="0" />
+
+
+</GridLayout>

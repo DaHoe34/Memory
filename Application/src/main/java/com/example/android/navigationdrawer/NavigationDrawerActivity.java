@@ -23,6 +23,8 @@ import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -35,6 +37,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.android.navigationdrawer.content.ViewPagerActivity;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.Locale;
 
@@ -65,7 +72,7 @@ import java.util.Locale;
  * An action should be an operation performed on the current contents of the window,
  * for example enabling or disabling a data overlay on top of the current content.</p>
  */
-public class NavigationDrawerActivity extends Activity implements PlanetAdapter.OnItemClickListener {
+public class NavigationDrawerActivity extends Activity implements PlanetAdapter.OnItemClickListener, View.OnClickListener {
     private DrawerLayout mDrawerLayout;
     private RecyclerView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -73,6 +80,12 @@ public class NavigationDrawerActivity extends Activity implements PlanetAdapter.
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mPlanetTitles;
+    static ImageView iv;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +132,9 @@ public class NavigationDrawerActivity extends Activity implements PlanetAdapter.
         if (savedInstanceState == null) {
             selectItem(0);
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
@@ -171,7 +187,7 @@ public class NavigationDrawerActivity extends Activity implements PlanetAdapter.
 
     private void selectItem(int position) {
         // update the main content by replacing fragments
-        Fragment fragment = PlanetFragment.newInstance(position);
+        Fragment fragment = PlanetFragment.newInstance(position,this);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -208,17 +224,63 @@ public class NavigationDrawerActivity extends Activity implements PlanetAdapter.
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "NavigationDrawer Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.example.android.navigationdrawer/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "NavigationDrawer Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.example.android.navigationdrawer/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
     /**
      * Fragment that appears in the "content_frame", shows a planet
      */
+
+    public void OnClick(View v){
+        Intent intent=new Intent(this, ViewPagerActivity.class);
+        startActivity(intent);
+    }
     public static class PlanetFragment extends Fragment {
         public static final String ARG_PLANET_NUMBER = "planet_number";
-
+        static NavigationDrawerActivity m_nda;
         public PlanetFragment() {
             // Empty constructor required for fragment subclasses
         }
 
-        public static Fragment newInstance(int position) {
+        public static Fragment newInstance(int position,NavigationDrawerActivity nda) {
+            m_nda=nda;
             Fragment fragment = new PlanetFragment();
             Bundle args = new Bundle();
             args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
@@ -229,17 +291,25 @@ public class NavigationDrawerActivity extends Activity implements PlanetAdapter.
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_planet, container, false);
+            View rootView = null;
             int i = getArguments().getInt(ARG_PLANET_NUMBER);
-            String planet = getResources().getStringArray(R.array.planets_array)[i];
 
-            int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
-                    "drawable", getActivity().getPackageName());
-            ImageView iv = ((ImageView) rootView.findViewById(R.id.image));
+            String planet = getResources().getStringArray(R.array.planets_array);
+
+            if (i == 0)
+                rootView = inflater.inflate(R.layout.fragment_family, container, false);
+            else if (i == 1)
+                rootView = inflater.inflate(R.layout.fragment_food, container, false);
+            else
+                rootView = inflater.inflate(R.layout.fragment_like, container, false);
+
+            int imageId=getResources().getIdentifier(planet.toLowerCase(Im))
+            iv = ((ImageView) rootView.findViewById(R.id.image));
+            iv.setOnClickListener(m_nda);
             iv.setImageResource(imageId);
-
             getActivity().setTitle(planet);
             return rootView;
         }
     }
+
 }
